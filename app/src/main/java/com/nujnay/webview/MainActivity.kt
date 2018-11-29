@@ -75,7 +75,6 @@ class MainActivity : Activity() {
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
             try {
-
                 wv_injected.loadUrl("javascript:$jsInjectedString")
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -85,15 +84,7 @@ class MainActivity : Activity() {
         override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
             runOnUiThread {
                 try {
-                    Log.d("shouldInterceptRequest", "ddddddd")
                     wv_injected.loadUrl("javascript:$jsInjectedString")
-                    var cookieManger: CookieManager = CookieManager.getInstance()
-                    var cookieString: String = cookieManger.getCookie(request!!.url.toString())
-                    if (!TextUtils.isEmpty(cookieString)) {
-                        if (request.url.toString().contentEquals(coockieUrl!!)) {
-
-                        }
-                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
