@@ -41,10 +41,10 @@ class MainActivity : Activity() {
     }
 
     private fun initjsInjected() {
-        val oldEmailJS = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email_input.js"), "UTF-8")
+        val oldEmailJS = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_email_input.js"), "UTF-8")
         jsInjectedOldEmail = oldEmailJS.replace("emailcontent", emailOld!!, false)
 
-        val oldPwdJS = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email_input.js"), "UTF-8")
+        val oldPwdJS = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_email_input.js"), "UTF-8")
         jsInjectedOldPwd = oldPwdJS.replace("pwdcontent", emailOldPassword!!, false)
 
         jsInjectedGetEmail = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_email.js"), "UTF-8")
