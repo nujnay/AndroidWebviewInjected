@@ -21,6 +21,9 @@ class MainActivity : Activity() {
     var jsInjectedOldEmailOK: Boolean? = false
     var jsInjectedOldPwdOK: Boolean? = false
 
+    var jsInjectedEmailOK: Boolean? = false
+    var jsInjectedPwdOK: Boolean? = false
+
     var jsInjectedOldEmail: String? = null
     var jsInjectedOldPwd: String? = null
 
@@ -53,7 +56,7 @@ class MainActivity : Activity() {
 
     private fun initjsInjected() {
         val oldEmailJS = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email_input.js"), "UTF-8")
-        jsInjectedOldPwd = oldEmailJS.replace("emailcontent", emailOld!!, false)
+        jsInjectedOldEmail = oldEmailJS.replace("emailcontent", emailOld!!, false)
 
         val oldPwdJS = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email_input.js"), "UTF-8")
         jsInjectedOldPwd = oldPwdJS.replace("pwdcontent", emailOldPassword!!, false)
@@ -119,11 +122,18 @@ class MainActivity : Activity() {
     }
 
     fun injectJs() {
-        if (jsInjectedOldEmailOK!!) {
-
+        if (needInputEmail!!) {
+            if (jsInjectedOldEmailOK!!) {// 老的email注入了 1 注入老密码 2
+                wv_injected.loadUrl("javascript:$jsInjectedGetEmail")
+            } else {
+                wv_injected.loadUrl("javascript:$jsInjectedOldEmail")
+            }
         } else {
-            wv_injected.loadUrl("javascript:$jsInjectedOldEmail")
+            if (jsInjectedEmailOK!!) {
+                wv_injected.loadUrl("javascript:$jsInjectedGetPwd")
+            } else {
+                wv_injected.loadUrl("javascript:$jsInjectedGetEmail")
+            }
         }
-
     }
 }
