@@ -20,7 +20,7 @@ class MainActivity : Activity() {
 
     public var jsInjectedOldEmail: String? = null
     public var jsInjectedOldPwd: String? = null
-    public var needInputEmail: Boolean? = false
+    public var needInputEmail: Boolean? = true
 
 
     public var emailOld: String? = "nujnai@outlook.com"
@@ -111,12 +111,14 @@ class MainActivity : Activity() {
     }
 
     fun injectJs() {
+        Log.d("inputOldEmialSuccess", needInputEmail.toString() + "|||" + inputOldEmialSuccess.toString())
         if (needInputEmail!!) {
             //先注入邮箱 注入成功不在注入
             if (inputOldEmialSuccess!!) {//注入成功 点击下一步判断是否 替换邮箱 替换邮箱不注入密码 为替换邮箱注入密码
                 wv_injected.loadUrl("javascript:$getEmailPwd")
+            } else {
+                wv_injected.loadUrl("javascript:$inputOldEmailJs")
             }
-
         } else {
             wv_injected.loadUrl("javascript:$getEmailPwd")
         }
