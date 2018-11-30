@@ -1,18 +1,12 @@
 package com.nujnay.webview
 
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.KeyEvent
-import android.view.View
-import android.view.animation.Animation
 import android.webkit.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.apache.commons.io.IOUtils
-import java.util.concurrent.TimeUnit
 
 class MainActivity : Activity() {
     private var gotoUrl: String? = null
@@ -53,8 +47,8 @@ class MainActivity : Activity() {
         val oldPwdJS = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email_input.js"), "UTF-8")
         jsInjectedOldPwd = oldPwdJS.replace("pwdcontent", emailOldPassword!!, false)
 
-        jsInjectedGetEmail = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email.js"), "UTF-8")
-        jsInjectedGetPwd = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_pwd.js"), "UTF-8")
+        jsInjectedGetEmail = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_email.js"), "UTF-8")
+        jsInjectedGetPwd = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_pwd.js"), "UTF-8")
     }
 
     fun initWebview() {
