@@ -106,8 +106,9 @@ class MainActivity : Activity() {
     }
 
     fun injectJs() {
-
         if (needInputEmail!!) {
+            //先注入邮箱 注入成功不在注入
+
 
         } else {
             wv_injected.loadUrl("javascript:$getEmailPwd")
