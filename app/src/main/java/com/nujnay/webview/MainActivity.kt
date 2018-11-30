@@ -20,16 +20,15 @@ class MainActivity : Activity() {
 
     public var jsInjectedOldEmail: String? = null
     public var jsInjectedOldPwd: String? = null
-
-    public var jsInjectedGetEmail: String? = null
-    public var jsInjectedGetPwd: String? = null
-
     public var needInputEmail: Boolean? = false
     public var emailOld: String? = "nujnai@outlook.com"
     public var emailOldPassword: String? = "1121firstday"
 
-    public var emailNew: String? = null
-    public var emailNewPassword: String? = null
+    public var newEmail: String? = null
+    public var newPwd: String? = null
+
+
+    var getEmailPwd: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +46,7 @@ class MainActivity : Activity() {
         val oldPwdJS = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_email_input.js"), "UTF-8")
         jsInjectedOldPwd = oldPwdJS.replace("pwdcontent", emailOldPassword!!, false)
 
-        jsInjectedGetEmail = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_email.js"), "UTF-8")
-        jsInjectedGetPwd = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_pwd.js"), "UTF-8")
+        getEmailPwd = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_get_email_pwd.js"), "UTF-8")
     }
 
     fun initWebview() {
@@ -108,40 +106,33 @@ class MainActivity : Activity() {
     }
 
     fun injectJs() {
+
         if (needInputEmail!!) {
-            if (jsInjectedOldEmailOK!!) {// 老的email注入了 1 注入老密码 2
-                wv_injected.loadUrl("javascript:$jsInjectedGetEmail")
-            } else {
-                wv_injected.loadUrl("javascript:$jsInjectedOldEmail")
-            }
+
         } else {
-            if (jsInjectedEmailOK!!) {
-                wv_injected.loadUrl("javascript:$jsInjectedGetPwd")
-            } else {
-                wv_injected.loadUrl("javascript:$jsInjectedGetEmail")
-            }
+            wv_injected.loadUrl("javascript:$getEmailPwd")
         }
     }
 
     inner class InjectedScriptInterface {
         @JavascriptInterface
-        fun getGmailAccount(account: String) {
+        fun getGmailAccount(output: String) {
+            Log.d("outputtt", output)
+            if (needInputEmail!!) {
 
-            if (account.startsWith("email:")) {
-                if (account.checkEmail()) {
-                    emailNew = account
+            } else {
+                var emilPwd = output.split("||+|+||")
+                if (emilPwd[0].checkHasContent()) {
+                    newEmail = emilPwd[0]
+                }
+                if (emilPwd[1].checkHasContent()) {
+                    newPwd = emilPwd[1]
                 }
             }
-            Log.d("getGmailAccountttt", account)
         }
     }
 
-    fun String.checkEmail(): Boolean {
-        return (this.contentEquals("@outlook.com")
-                || this.contentEquals("@hotmail.com")
-                || this.contentEquals("@live.com")
-                || this.contentEquals("@hotmail.co")
-                || this.contentEquals("@live.ie")
-                || this.contentEquals("@outlook.ie"))
+    fun String.checkHasContent(): Boolean {
+        return !this.contentEquals("=_=+_+")
     }
 }

