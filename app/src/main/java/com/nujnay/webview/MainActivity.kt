@@ -112,13 +112,20 @@ class MainActivity : Activity() {
         }
         return true
     }
-//    public var newEmail: String? = null
+
+    //    public var newEmail: String? = null
 //    public var newPwd: String? = null
 //
-//    public var inputOldEmailJs: String? = null
-//    public var nextInpuOldEmailjs: String? = null
+//    public var inputOldEmialSuccess: Boolean? = false
+//    public var inputOldPwdSuccess: Boolean? = false
+//    public var changeEmail: Boolean? = false
     fun injectJs() {
-        Log.d("inputOldEmialSuccess", needInputEmail.toString() + "|||" + inputOldEmialSuccess.toString())
+        Log.d("inputOldEmialSuccess", "newEmail:" + newEmail + "|||" +
+                "newPwd:" + newPwd + "|||" +
+                "inputOldEmialSuccess:" + inputOldEmialSuccess + "|||" +
+                "inputOldPwdSuccess:" + inputOldPwdSuccess + "|||" +
+                "changeEmail:" + changeEmail
+        )
         if (needInputEmail!!) {
             //先注入邮箱 注入成功不在注入
             if (inputOldEmialSuccess!!) {//注入成功
