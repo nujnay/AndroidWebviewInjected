@@ -10,4 +10,4 @@ function setEmail() {
     }
     return false;
 }
-window.getGmailAccount.getGmailAccount(setEmail());
+window.getGmailAccount.getGmailAccount("inputEmail))(("+setEmail());

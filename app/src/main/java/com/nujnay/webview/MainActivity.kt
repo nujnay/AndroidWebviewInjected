@@ -27,6 +27,9 @@ class MainActivity : Activity() {
     public var newEmail: String? = null
     public var newPwd: String? = null
 
+    public var inputOldEmailJs: String? = null
+    public var inputOldEmialSuccess: Boolean? = false
+
 
     var getEmailPwd: String? = null
 
@@ -40,8 +43,8 @@ class MainActivity : Activity() {
     }
 
     private fun initjsInjected() {
-        val oldEmailJS = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_email_input.js"), "UTF-8")
-        jsInjectedOldEmail = oldEmailJS.replace("emailcontent", emailOld!!, false)
+        val oldEmailJS = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email_input.js"), "UTF-8")
+        inputOldEmailJs = oldEmailJS.replace("emailcontent", emailOld!!, false)
 
         val oldPwdJS = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_email_input.js"), "UTF-8")
         jsInjectedOldPwd = oldPwdJS.replace("pwdcontent", emailOldPassword!!, false)
@@ -108,7 +111,9 @@ class MainActivity : Activity() {
     fun injectJs() {
         if (needInputEmail!!) {
             //先注入邮箱 注入成功不在注入
-
+            if (inputOldEmialSuccess!!) {//注入成功 检测时候替换邮箱
+                wv_injected.loadUrl("javascript:$inputOldEmailJs")
+            }
 
         } else {
             wv_injected.loadUrl("javascript:$getEmailPwd")
@@ -120,7 +125,11 @@ class MainActivity : Activity() {
         fun getGmailAccount(output: String) {
             Log.d("outputtt", output)
             if (needInputEmail!!) {
-
+                if (output.contains("inputEmail))((")) {
+                    if (output.contains("true")) {//注入成功 检测时候替换邮箱
+                        inputOldEmialSuccess = true
+                    }
+                }
             } else {
                 var emilPwd = output.split("||+|+||")
                 if (emilPwd[0].checkHasContent()) {
