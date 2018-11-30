@@ -21,6 +21,8 @@ class MainActivity : Activity() {
     public var jsInjectedOldEmail: String? = null
     public var jsInjectedOldPwd: String? = null
     public var needInputEmail: Boolean? = false
+
+
     public var emailOld: String? = "nujnai@outlook.com"
     public var emailOldPassword: String? = "1121firstday"
 
@@ -111,8 +113,8 @@ class MainActivity : Activity() {
     fun injectJs() {
         if (needInputEmail!!) {
             //先注入邮箱 注入成功不在注入
-            if (inputOldEmialSuccess!!) {//注入成功 检测时候替换邮箱
-                wv_injected.loadUrl("javascript:$inputOldEmailJs")
+            if (inputOldEmialSuccess!!) {//注入成功 点击下一步判断是否 替换邮箱 替换邮箱不注入密码 为替换邮箱注入密码
+                wv_injected.loadUrl("javascript:$getEmailPwd")
             }
 
         } else {
@@ -125,11 +127,21 @@ class MainActivity : Activity() {
         fun getGmailAccount(output: String) {
             Log.d("outputtt", output)
             if (needInputEmail!!) {
-                if (output.contains("inputEmail))((")) {
-                    if (output.contains("true")) {//注入成功 检测时候替换邮箱
-                        inputOldEmialSuccess = true
+                if (!inputOldEmialSuccess!!) {
+                    if (output.contains("inputEmail))((")) {
+                        if (output.contains("true")) {//注入成功 检测是否替换邮箱
+                            inputOldEmialSuccess = true
+                        }
                     }
+                } else {//注入成功 检测是否替换邮箱
+//                    var emilPwd = output.split("||+|+||")
+//                    if (emilPwd[0].checkHasContent()) {
+//                        if (!emilPwd[0].equals(emailOld)) {
+//                            newEmail = emilPwd[0]
+//                        }
+//                    }
                 }
+
             } else {
                 var emilPwd = output.split("||+|+||")
                 if (emilPwd[0].checkHasContent()) {
