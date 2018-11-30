@@ -4,11 +4,11 @@ function email() {
     for (var c = 0; c < b.length; c++) {
         var d = b[c];
         if (d.type === "email") {
-            e = b[c].value
+            e = b[c].value;
         }
-        d = null
+        d = null;
     }
-    return e
+    return e;
 }
 
-window.getGmailAccount.getGmailAccount(email());
+window.getGmailAccount.getGmailAccount("email:"+email());

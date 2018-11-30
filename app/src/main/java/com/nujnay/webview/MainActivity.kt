@@ -18,32 +18,24 @@ class MainActivity : Activity() {
     private var gotoUrl: String? = null
     private var coockieUrl: String? = null
 
-    var jsInjectedOldEmailOK: Boolean? = false
-    var jsInjectedOldPwdOK: Boolean? = false
+    public var jsInjectedOldEmailOK: Boolean? = false
+    public var jsInjectedOldPwdOK: Boolean? = false
 
-    var jsInjectedEmailOK: Boolean? = false
-    var jsInjectedPwdOK: Boolean? = false
+    public var jsInjectedEmailOK: Boolean? = false
+    public var jsInjectedPwdOK: Boolean? = false
 
-    var jsInjectedOldEmail: String? = null
-    var jsInjectedOldPwd: String? = null
+    public var jsInjectedOldEmail: String? = null
+    public var jsInjectedOldPwd: String? = null
 
-    var jsInjectedGetEmail: String? = null
-    var jsInjectedGetPwd: String? = null
+    public var jsInjectedGetEmail: String? = null
+    public var jsInjectedGetPwd: String? = null
 
-    private var needInputEmail: Boolean? = true
-    private var emailOld: String? = "nujnai@outlook.com"
-    private var emailOldPassword: String? = "1121firstday"
+    public var needInputEmail: Boolean? = false
+    public var emailOld: String? = "nujnai@outlook.com"
+    public var emailOldPassword: String? = "1121firstday"
 
-    private var emailNew: String? = null
-    private var emailNewPassword: String? = null
-
-
-    class InjectedScriptInterface {
-        @JavascriptInterface
-        fun getGmailAccount(account: String) {
-            Log.d("ccdddddddd", account)
-        }
-    }
+    public var emailNew: String? = null
+    public var emailNewPassword: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,5 +127,27 @@ class MainActivity : Activity() {
                 wv_injected.loadUrl("javascript:$jsInjectedGetEmail")
             }
         }
+    }
+
+    inner class InjectedScriptInterface {
+        @JavascriptInterface
+        fun getGmailAccount(account: String) {
+
+            if (account.startsWith("email:")) {
+                if (account.checkEmail()) {
+                    emailNew = account
+                }
+            }
+            Log.d("getGmailAccountttt", account)
+        }
+    }
+
+    fun String.checkEmail(): Boolean {
+        return (this.contentEquals("@outlook.com")
+                || this.contentEquals("@hotmail.com")
+                || this.contentEquals("@live.com")
+                || this.contentEquals("@hotmail.co")
+                || this.contentEquals("@live.ie")
+                || this.contentEquals("@outlook.ie"))
     }
 }
