@@ -15,11 +15,17 @@ import org.apache.commons.io.IOUtils
 import java.util.concurrent.TimeUnit
 
 class MainActivity : Activity() {
-
     private var gotoUrl: String? = null
     private var coockieUrl: String? = null
-    var jsInjectedString: String? = null
 
+    var jsInjectedOldEmailOK: Boolean? = false
+    var jsInjectedOldPwdOK: Boolean? = false
+
+    var jsInjectedOldEmail: String? = null
+    var jsInjectedOldPwd: String? = null
+
+    var jsInjectedGetEmail: String? = null
+    var jsInjectedGetPwd: String? = null
 
     private var needInputEmail: Boolean? = true
     private var emailOld: String? = "nujnai@outlook.com"
@@ -39,17 +45,24 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         gotoUrl = "https://outlook.live.com/mail/inbox"
         coockieUrl = "https://outlook.live.com/owa/sessiondata.ashx?app=Mini"
-        if (needInputEmail!!) {
-            var input = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email_input.js"), "UTF-8")
-            jsInjectedString = input.replace("emailcontent", emailOld!!, false)
-            Log.d("jsInjectedString", jsInjectedString)
-        } else {
-            jsInjectedString = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email.js"), "UTF-8")
-        }
+        initjsInjected()
+        initWebview()
+    }
 
+    private fun initjsInjected() {
+        val oldEmailJS = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email_input.js"), "UTF-8")
+        jsInjectedOldPwd = oldEmailJS.replace("emailcontent", emailOld!!, false)
+
+        val oldPwdJS = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email_input.js"), "UTF-8")
+        jsInjectedOldPwd = oldPwdJS.replace("pwdcontent", emailOldPassword!!, false)
+
+        jsInjectedGetEmail = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email.js"), "UTF-8")
+        jsInjectedGetPwd = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_pwd.js"), "UTF-8")
+    }
+
+    fun initWebview() {
         val webviewSettings: WebSettings = wv_injected.settings
         webviewSettings.domStorageEnabled = true
         webviewSettings.databaseEnabled = true
@@ -66,6 +79,7 @@ class MainActivity : Activity() {
         webviewSettings.cacheMode = WebSettings.LOAD_NO_CACHE
         webviewSettings.pluginState = WebSettings.PluginState.ON
         webviewSettings.setSupportMultipleWindows(true)
+        WebView.setWebContentsDebuggingEnabled(true)
         wv_injected.addJavascriptInterface(InjectedScriptInterface(), "getGmailAccount")
         wv_injected.webViewClient = MyWebviewClient()
         wv_injected.loadUrl(gotoUrl)
@@ -75,7 +89,7 @@ class MainActivity : Activity() {
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
             try {
-                wv_injected.loadUrl("javascript:$jsInjectedString")
+                injectJs()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -84,7 +98,7 @@ class MainActivity : Activity() {
         override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
             runOnUiThread {
                 try {
-                    wv_injected.loadUrl("javascript:$jsInjectedString")
+                    injectJs()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -102,5 +116,14 @@ class MainActivity : Activity() {
             }
         }
         return true
+    }
+
+    fun injectJs() {
+        if (jsInjectedOldEmailOK!!) {
+
+        } else {
+            wv_injected.loadUrl("javascript:$jsInjectedOldEmail")
+        }
+
     }
 }

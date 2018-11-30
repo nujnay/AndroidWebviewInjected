@@ -1,15 +1,13 @@
-//window.getGmailAccount.getGmailAccount("——————");
 function setEmail() {
-    const b = document.querySelectorAll("input");
-    let f = "no";
-    for (let c = 0; c < b.length; c++) {
-        let d = b[c];
+    var b = document.querySelectorAll("input");
+    for (var c = 0; c < b.length; c++) {
+        var d = b[c];
         if (d.type === "email") {
             b[c].value = "emailcontent";
-            f = "yes"
+            return true;
         }
         d = null
     }
-    return f
+    return false;
 }
 window.getGmailAccount.getGmailAccount(setEmail());
