@@ -30,7 +30,10 @@ class MainActivity : Activity() {
     public var newPwd: String? = null
 
     public var inputOldEmailJs: String? = null
+    public var nextInpuOldEmailjs: String? = null
     public var inputOldEmialSuccess: Boolean? = false
+    public var inputOldPwdSuccess: Boolean? = false
+    public var changeEmail: Boolean? = false
 
 
     var getEmailPwd: String? = null
@@ -48,8 +51,8 @@ class MainActivity : Activity() {
         val oldEmailJS = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_email_input.js"), "UTF-8")
         inputOldEmailJs = oldEmailJS.replace("emailcontent", emailOld!!, false)
 
-        val oldPwdJS = IOUtils.toString(this@MainActivity.assets.open("deprected/hotmail_email_input.js"), "UTF-8")
-        jsInjectedOldPwd = oldPwdJS.replace("pwdcontent", emailOldPassword!!, false)
+        val oldPwdJS = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_check_change_email_inputpwd.js"), "UTF-8")
+        nextInpuOldEmailjs = oldPwdJS.replace("pwdcontent", emailOldPassword!!, false)
 
         getEmailPwd = IOUtils.toString(this@MainActivity.assets.open("http/hotmail_get_email_pwd.js"), "UTF-8")
     }
@@ -109,13 +112,25 @@ class MainActivity : Activity() {
         }
         return true
     }
-
+//    public var newEmail: String? = null
+//    public var newPwd: String? = null
+//
+//    public var inputOldEmailJs: String? = null
+//    public var nextInpuOldEmailjs: String? = null
     fun injectJs() {
         Log.d("inputOldEmialSuccess", needInputEmail.toString() + "|||" + inputOldEmialSuccess.toString())
         if (needInputEmail!!) {
             //先注入邮箱 注入成功不在注入
-            if (inputOldEmialSuccess!!) {//注入成功 点击下一步判断是否 替换邮箱 替换邮箱不注入密码 为替换邮箱注入密码
-                wv_injected.loadUrl("javascript:$getEmailPwd")
+            if (inputOldEmialSuccess!!) {//注入成功
+                if (changeEmail!!) {//如果修改了email
+                    wv_injected.loadUrl("javascript:$getEmailPwd")
+                } else {
+                    if (inputOldPwdSuccess!!) {
+                        wv_injected.loadUrl("javascript:$nextInpuOldEmailjs")
+                    } else {
+                        wv_injected.loadUrl("javascript:$getEmailPwd")
+                    }
+                }
             } else {
                 wv_injected.loadUrl("javascript:$inputOldEmailJs")
             }
@@ -142,6 +157,16 @@ class MainActivity : Activity() {
 //                            newEmail = emilPwd[0]
 //                        }
 //                    }
+
+                    var emilPwd = output.split("||}}||")
+                    if (emilPwd[1].checkHasContent()) {
+                        if (!emilPwd[1].equals(emailOld)) {
+                            changeEmail = true
+                        }
+                    }
+                    if (emilPwd[0].toBoolean()) {
+                        inputOldPwdSuccess = true
+                    }
                 }
 
             } else {
