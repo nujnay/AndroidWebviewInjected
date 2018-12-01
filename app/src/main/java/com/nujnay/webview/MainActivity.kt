@@ -84,7 +84,7 @@ class MainActivity : Activity() {
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
             try {
-                injectJs()
+//                injectJs()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -93,7 +93,7 @@ class MainActivity : Activity() {
         override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
             runOnUiThread {
                 try {
-                    injectJs()
+//                    injectJs()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
